@@ -1,21 +1,24 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import './gameOfLife.css'
 
 class Cell {
     row: number;
     column: number;
     alive: boolean;
-    neighbours(tableRef:Table):Cell[] {
+    neighboursAlive(tableRef:Table):number {
         let neighbouringCells = [];
         for (let iRow = this.row - 1 < 0 ? 0 : this.row - 1; iRow <= this.row + 1; iRow++) {
             if (iRow >= tableRef.rows) {
                 continue;
             }
             for (let iCol = this.column - 1 < 0 ? 0 : this.column - 1; iCol <= this.column + 1; iCol++) {
+                if (iCol >= tableRef.columns) {
+                    continue;
+                }
                 neighbouringCells.push(tableRef.getCell(iRow, iCol))  
             }
         }
-        return neighbouringCells.filter(cell => cell.column !== this.column || cell.row !== this.row);
+        return neighbouringCells.filter(cell => (cell.column !== this.column || cell.row !== this.row) && cell.alive).length;
     }
     
     constructor(row:number, column:number, alive:boolean) {
@@ -29,7 +32,6 @@ class Table {
     rows: number;
     columns: number;
     cells:Cell[][];
-
     getCell(row:number, col:number) {
         return this.cells[row][col];
     }
@@ -47,12 +49,15 @@ class Table {
     }
 }
 
-function aliveCheck(alivecount:number) {
-
+function nextGenStatus(alive:boolean, neighboursAlive:number):boolean {
+    if (alive) {
+        return neighboursAlive >= 2 && neighboursAlive <= 3;
+    } else {
+        return neighboursAlive === 3;
+    }
 }
-function deadCheck(alivecount:number) {
 
-}
+
 
 
 export function GameOfLife() {
@@ -73,14 +78,28 @@ export function GameOfLife() {
             }
         }
         setCurrentTable(new Table(rows, columns, cells));
+        setNextGeneration(undefined);
         setInitialRender(false);
     }
-    
+    function resetLife() {
+        setInitialRender(true);
+    }
 
     function toggleAlive(row:number, column:number) {
         let cells:Cell[][] = [];
         cells = currentTable.cells.map(tableRow => tableRow.map(cell => new Cell(cell.row, cell.column, (cell.row === row && cell.column === column) ? cell.alive = !cell.alive : cell.alive)))
         setCurrentTable(new Table(rows, columns, cells));
+    }
+    function createNextGen() {
+        let cells:Cell[][] = [];
+        for (let iRow = 0; iRow < rows; iRow++) {
+            cells[iRow] = []
+            for (let iCol = 0; iCol < columns; iCol++) {
+                let currentCell = currentTable.getCell(iRow, iCol);
+                cells[iRow][iCol] = new Cell(iRow, iCol, nextGenStatus(currentCell.alive, currentCell.neighboursAlive(currentTable)));
+            }
+        }
+        setNextGeneration(new Table(rows, columns, cells))
     }
     
     if (currentTable.cells === undefined) {
@@ -88,16 +107,25 @@ export function GameOfLife() {
             <></>
         );
     }
-    console.log(currentTable.cells[1][12].neighbours(currentTable));
+    if (nextGeneration !== undefined) {
+        setCurrentTable(nextGeneration);
+        setNextGeneration(undefined);
+    }
+
+    
 
     return (
         <div className="game-of-life-wrapper">
-            <table>
+            <table className="world-of-cells">
                 <tbody>
                     {currentTable.cells.map(tableRow => <tr>{tableRow.map(cell => <td onClick={() => toggleAlive(cell.row, cell.column)} className={cell.alive === true ? "alive" : "dead"}></td>)}</tr>)}
                 </tbody>
             </table>
-            {}
+            <div className="controls">
+                <button onClick={createNextGen}>Advance one generation</button>
+                <button>Start</button>
+                <button onClick={resetLife}>Reset</button>
+            </div>
         </div>
     );
 }
