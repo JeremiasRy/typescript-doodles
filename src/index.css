@@ -1,4 +1,13 @@
+body {
+    background-color: black;
+}
+h1 {
+    text-align: center;
+}
+
 .component-wrapper {
+    margin-bottom: 10px;
+    background-color: antiquewhite;
     padding: 10px;
     border-radius: 5px;
     border: 1px solid black;

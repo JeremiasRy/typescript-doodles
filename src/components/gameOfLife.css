@@ -2,8 +2,39 @@ td {
     width: 1.5em;
     height: 1.5em;
     border: 1px solid black;
+    border-radius: 3px;
+    transition: background-color 75ms ease-in 0ms;
 }
-
+td:hover {
+    box-shadow: 0 0 1px 1px goldenrod;
+    cursor: pointer;
+    transition: all 500ms ease-in-out 0;
+}
 .alive {
     background-color: black;
+    box-shadow: 0 0 1px 1px ghostwhite;
+}
+.game-of-life-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+.controls {
+    display: flex;
+    flex-direction: column;
+}
+
+button {
+    border-radius: 5px;
+    margin: 5px;
+    padding: 10px;
+    background-color: blanchedalmond;
+    box-shadow: 1px 1px 2px 2px black;
+    border: 1px solid darkgray;
+    cursor: pointer;
+}
+button:active {
+    border: 1px solid black;
+    box-shadow: 1px 1px 1px 1px black;
+    background-color: rgb(218, 200, 174);
 }

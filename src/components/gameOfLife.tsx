@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, } from "react"
 import './gameOfLife.css'
 
 class Cell {
@@ -91,6 +91,8 @@ export function GameOfLife() {
     }
 
     function toggleAlive(row:number, column:number) {
+        if (running)
+            return;
         let cells:Cell[][] = [];
         cells = currentTable.cells.map(tableRow => tableRow.map(cell => new Cell(cell.row, cell.column, (cell.row === row && cell.column === column) ? cell.alive = !cell.alive : cell.alive)))
         setCurrentTable(new Table(rows, columns, cells));
@@ -126,16 +128,43 @@ export function GameOfLife() {
 
     return (
         <div className="game-of-life-wrapper">
+            <div className="info">
+                <h1 className="header">Game of life</h1>
+                <p>
+                A conways game of life made in react with typescript! <br/>
+                I tried to use as much OOP as I could and am satisfied with the result <br />
+                The rules are:
+                </p>
+                <ul>
+                    <li>
+                    Any live cell with fewer than two live neighbours dies, as if by underpopulation.
+                    </li>
+                    <li>
+                    Any live cell with two or three live neighbours lives on to the next generation.
+                    </li>
+                    <li>
+                    Any live cell with more than three live neighbours dies, as if by overpopulation.
+                    </li>
+                    <li>
+                    Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+                    </li>
+                </ul>
+                <p>
+                    Click on the squares you wish to turn "live" or "dead" then press play and see what happens!
+                </p>
+                <p>Feel free to go look at the code on <a href="https://github.com/JeremiasRy/typescript-test" target="_blank">Github</a></p>
+            </div>
             <table className="world-of-cells">
                 <tbody>
                     {currentTable.cells.map(tableRow => <tr>{tableRow.map(cell => <td onClick={() => toggleAlive(cell.row, cell.column)} className={cell.alive === true ? "alive" : "dead"}></td>)}</tr>)}
                 </tbody>
             </table>
             <div className="controls">
-                <button onClick={advanceGenerationClick}>Advance one generation</button>
+                <p>Generation: {generation}</p>
                 <button onClick={() => { setRunning(!running) }}>{running ? "Stop" : "Start" }</button>
                 <button onClick={() => { setReset(true) }}>Reset</button>
-                <p>Generation: {generation}</p>
+                <br/>
+                <button onClick={advanceGenerationClick}>Advance one generation</button>
             </div>
         </div>
     );

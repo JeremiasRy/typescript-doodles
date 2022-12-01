@@ -6,10 +6,10 @@ function App() {
   return (
     <>
     <div className="component-wrapper">
-      <Counter />
+      <GameOfLife />
     </div>
     <div className="component-wrapper">
-      <GameOfLife />
+      <Counter />
     </div>
     </>
   );

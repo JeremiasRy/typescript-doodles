@@ -10,10 +10,14 @@ export function Counter() {
   
     return (
       <div className="counter">
-        <h1>{count}</h1>
+        <h1>Counter</h1>
+        <p>You guessed it! It's a counter!</p>
+        <h3>{count}</h3>
+        <div className="buttons">
         <button value={1} onClick={e => handleClick(parseInt(e.currentTarget.value))}>Increment</button>
         <button value={-1} onClick={e => handleClick(parseInt(e.currentTarget.value))}>Decrement</button>
         <button value={-count} onClick={e => handleClick(parseInt(e.currentTarget.value))}>Reset</button>
+        </div>
       </div>
     );
 }
