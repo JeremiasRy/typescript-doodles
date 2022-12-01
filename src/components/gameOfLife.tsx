@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import './gameOfLife.css'
 
 class Cell {
@@ -57,19 +57,25 @@ function nextGenStatus(alive:boolean, neighboursAlive:number):boolean {
     }
 }
 
-
-
-
 export function GameOfLife() {
     const rows = 25;
     const columns = 25;
     
     const [currentTable, setCurrentTable] = useState<Table>({} as Table);
-    const [initialRender, setInitialRender] = useState<boolean>(true)
+    const [reset, setReset] = useState<boolean>(true)
     const [running, setRunning] = useState<boolean>(false)
     const [nextGeneration, setNextGeneration] = useState<Table>();
+    const [generation, setGeneration] = useState<number>(0);
 
-    if (initialRender) {
+    let timer = useRef<ReturnType<typeof setTimeout>>();
+
+    clearTimeout(timer.current)
+
+    if (running) {
+        timer.current = setTimeout(() => createNextGen(), 150);
+    } 
+
+    if (reset) {
         let cells:Cell[][] = [];
         for (let iRow = 0; iRow < rows; iRow++) {
             cells[iRow] = []
@@ -79,10 +85,9 @@ export function GameOfLife() {
         }
         setCurrentTable(new Table(rows, columns, cells));
         setNextGeneration(undefined);
-        setInitialRender(false);
-    }
-    function resetLife() {
-        setInitialRender(true);
+        setGeneration(0);
+        setReset(false);
+        setRunning(false);
     }
 
     function toggleAlive(row:number, column:number) {
@@ -90,6 +95,11 @@ export function GameOfLife() {
         cells = currentTable.cells.map(tableRow => tableRow.map(cell => new Cell(cell.row, cell.column, (cell.row === row && cell.column === column) ? cell.alive = !cell.alive : cell.alive)))
         setCurrentTable(new Table(rows, columns, cells));
     }
+
+    function advanceGenerationClick() {
+        createNextGen();
+    }
+
     function createNextGen() {
         let cells:Cell[][] = [];
         for (let iRow = 0; iRow < rows; iRow++) {
@@ -107,12 +117,12 @@ export function GameOfLife() {
             <></>
         );
     }
+
     if (nextGeneration !== undefined) {
         setCurrentTable(nextGeneration);
         setNextGeneration(undefined);
+        setGeneration(generation + 1);
     }
-
-    
 
     return (
         <div className="game-of-life-wrapper">
@@ -122,9 +132,10 @@ export function GameOfLife() {
                 </tbody>
             </table>
             <div className="controls">
-                <button onClick={createNextGen}>Advance one generation</button>
-                <button>Start</button>
-                <button onClick={resetLife}>Reset</button>
+                <button onClick={advanceGenerationClick}>Advance one generation</button>
+                <button onClick={() => { setRunning(!running) }}>{running ? "Stop" : "Start" }</button>
+                <button onClick={() => { setReset(true) }}>Reset</button>
+                <p>Generation: {generation}</p>
             </div>
         </div>
     );
