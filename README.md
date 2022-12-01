@@ -1,5 +1,5 @@
-# Ts test
+# Doodles
 
-Just a doodle to figure out how TS works
+- Counter
 
 
