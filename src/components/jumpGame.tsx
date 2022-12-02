@@ -88,7 +88,6 @@ export function Game() {
         }
         switch (e.code) {
             case "Space": {
-                console.log(maxHeight - player.height - 10)
                 if (player.yPosition > maxHeight - player.height - 10) {
                     player.yForce += -35000;
                 }
