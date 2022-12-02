@@ -5,7 +5,7 @@
 
 ## Live site
 
-deployed at [netlify](https://master--tangerine-piroshki-cc53d1.netlify.app/)
+Deployed to [netlify](https://master--tangerine-piroshki-cc53d1.netlify.app/)
 
 ## Set up
 
