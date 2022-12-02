@@ -111,12 +111,13 @@ export function Game() {
             }
         }
     }
-
-
-
     return (
+        <>
+        <h1>A jumping block!</h1>
+        <p>Click on the area to activate it! arrows left and right move and spacebar jumps! <br/> It's under construction but you can already play around with it</p>
         <div id="game-area" tabIndex={0} onKeyDown={handleKeyDown}>
             <div id="player" style={{top: player.yPosition, left: player.xPosition }}><p>X: {player.xPosition} <br/> Y: {player.yPosition}</p></div>
         </div>
+        </>
     );
 }

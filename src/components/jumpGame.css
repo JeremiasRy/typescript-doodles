@@ -7,7 +7,9 @@
     border-radius: 5px;
     padding: 2px 3px 2px 2px;
 }
-
+p {
+    text-align: center;
+}
 #player {
     position: relative;
     width: 50px;
