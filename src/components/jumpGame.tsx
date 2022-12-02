@@ -7,23 +7,21 @@ class Player {
     yPosition:number = 0;
     height:number = 50;
     width:number = 50;
-    onGround:boolean;
-
 
     xForce:number = 0;
     yForce:number = 0;
 
     static gravityForce:number = 750;
     static maxVelocity:number = 100;
-    static forceToIncreaseVelocity:number = 1200;
+    static forceToIncreaseVelocity:number = 1000;
     static frictionForce:number = 50;
-    static frictionForceGround:number = 600;
+    static frictionForceGround:number = 300;
 
     public static xVelocity(force:number):number {
-        return Math.round(force / this.forceToIncreaseVelocity)
+        return Math.round(force / this.forceToIncreaseVelocity);
     }
     public static yVelocity(force:number):number {
-        return Math.round((force + this.gravityForce) / this.forceToIncreaseVelocity)
+        return Math.round((force + this.gravityForce) / this.forceToIncreaseVelocity);
     }
 
     static reverseForce(force:number):number {
@@ -33,9 +31,20 @@ class Player {
     constructor(x:number, y:number, xForce:number, yForce:number, ground:boolean) {
         this.xPosition = x;
         this.yPosition = y;
-        this.xForce = xForce;
+        if (ground) {
+            if (xForce < 0) {
+                this.xForce = xForce + Player.frictionForceGround > 0 ? 0 : xForce + Player.frictionForceGround;
+            } else {
+                this.xForce = xForce - Player.frictionForceGround < 0 ? 0 : xForce - Player.frictionForceGround;
+            }
+        } else {
+            if (xForce < 0) {
+                this.xForce = xForce + Player.frictionForce > 0 ? 0 : xForce + Player.frictionForce;
+            } else {
+                this.xForce = xForce - Player.frictionForce < 0 ? 0 : xForce - Player.frictionForce;
+            }
+        }
         this.yForce = yForce + Player.gravityForce;
-        this.onGround = ground;
     }
 }
 
@@ -77,20 +86,28 @@ export function Game() {
             setRunning(!running);
             return;
         }
-        console.log(e.code)
         switch (e.code) {
             case "Space": {
                 console.log(maxHeight - player.height - 10)
                 if (player.yPosition > maxHeight - player.height - 10) {
-                    console.log("jausers");
                     player.yForce += -35000;
                 }
             } break;
             case "ArrowRight": {
-                player.xForce += 2500;
+                if (Math.abs(player.xForce) < Player.forceToIncreaseVelocity) {
+                    player.xForce += 10000
+                } else {
+                    player.xForce += 1500;
+                }
+                
             } break;
             case "ArrowLeft": {
-                player.xForce -= 2500;
+                if (Math.abs(player.xForce) < Player.forceToIncreaseVelocity) {
+                    player.xForce -= 10000
+                } else {
+                    player.xForce -= 1500;
+                }
+
             }
         }
     }
