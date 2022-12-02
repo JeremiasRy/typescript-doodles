@@ -119,7 +119,6 @@ export function GameOfLife() {
             <></>
         );
     }
-
     if (nextGeneration !== undefined) {
         setCurrentTable(nextGeneration);
         setNextGeneration(undefined);
@@ -152,7 +151,7 @@ export function GameOfLife() {
                 <p>
                     Click on the squares you wish to turn "live" or "dead" then press play and see what happens!
                 </p>
-                <p>Feel free to go look at the code on <a href="https://github.com/JeremiasRy/typescript-test" target="_blank">Github</a></p>
+                <p>Feel free to go look at the code on <a href="https://github.com/JeremiasRy/typescript-test">Github</a></p>
             </div>
             <table className="world-of-cells">
                 <tbody>
