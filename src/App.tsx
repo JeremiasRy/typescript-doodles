@@ -7,10 +7,10 @@ function App() {
   return (
     <>
     <div className="component-wrapper">
-      <Game />
+      <GameOfLife />
     </div>
     <div className="component-wrapper">
-      <GameOfLife />
+      <Game />
     </div>
     <div className="component-wrapper">
       <Counter />
