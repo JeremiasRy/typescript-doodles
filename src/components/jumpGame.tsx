@@ -15,7 +15,7 @@ class Player {
     static maxVelocity:number = 100;
     static forceToIncreaseVelocity:number = 1000;
     static frictionForce:number = 50;
-    static frictionForceGround:number = 300;
+    static frictionForceGround:number = 600;
 
     public static xVelocity(force:number):number {
         return Math.round(force / this.forceToIncreaseVelocity);
@@ -53,8 +53,8 @@ export function Game() {
     const [running, setRunning] = useState<boolean>(true);
     const [player, setPlayer] = useState<Player>(new Player(0,0,0,0, false));
 
-    const maxHeight = 788;
-    const maxWidth = 788;
+    const maxHeight = 786;
+    const maxWidth = 798;
 
     let tickTimer = useRef<undefined | ReturnType<typeof setTimeout>>()
 
@@ -68,14 +68,22 @@ export function Game() {
         let playerNextXPosition = player.xPosition + Player.xVelocity(player.xForce);
         let playerNextYPosition = player.yPosition + Player.yVelocity(player.yForce);
         let nextYforce = 0;
+        let nextXforce = 0;
         if (playerNextYPosition + player.height > maxHeight) {
             playerNextYPosition = maxHeight - player.height;
             nextYforce = Player.reverseForce(player.yForce) / 2;
         }
+        if (playerNextXPosition < 0) {
+            playerNextXPosition = 0;
+            nextXforce = Player.reverseForce(player.xForce) / 2;
+        } else if (playerNextXPosition > maxWidth - player.width) {
+            playerNextXPosition = maxWidth - player.width;
+            nextXforce = Player.reverseForce(player.xForce) / 2;
+        }
         setPlayer(new Player(
             playerNextXPosition,
             playerNextYPosition,
-            player.xForce,
+            nextXforce === 0 ? player.xForce : nextXforce,
             nextYforce === 0 ? player.yForce : nextYforce,
             maxHeight - player.height === player.yPosition));
     }
@@ -89,24 +97,17 @@ export function Game() {
         switch (e.code) {
             case "Space": {
                 if (player.yPosition > maxHeight - player.height - 10) {
-                    player.yForce += -35000;
+                    player.yForce += -25000;
                 }
-            } break;
+                return;
+            }
             case "ArrowRight": {
-                if (Math.abs(player.xForce) < Player.forceToIncreaseVelocity) {
-                    player.xForce += 10000
-                } else {
-                    player.xForce += 1500;
-                }
-                
-            } break;
+                player.xForce += 2000;
+                return;
+            }
             case "ArrowLeft": {
-                if (Math.abs(player.xForce) < Player.forceToIncreaseVelocity) {
-                    player.xForce -= 10000
-                } else {
-                    player.xForce -= 1500;
-                }
-
+                player.xForce -= 2000;
+                return;
             }
         }
     }
