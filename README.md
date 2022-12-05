@@ -2,7 +2,7 @@
 
 - Counter ``./src/components/counter.tsx``
 - Game of life ``./src/components/gameOfLife.tsx``
-- Jumping block game (Not finished yet!! but still fun..)
+- Jumping block game ``./src/components/jumpGame.tsx``
 
 ## Live site
 
