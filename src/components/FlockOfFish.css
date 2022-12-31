@@ -1,0 +1,20 @@
+.fish-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 95vw;
+    height: 95vh
+}
+.fish-wrapper__lake {
+    background-color: aqua;
+    box-shadow: 0 0 2px 2px rgb(1, 145, 145);
+    width: 90%;
+    height: 90%;
+    margin: auto;
+}
+.fish {
+    position: relative;
+    display: inline-block;
+    height: 1px;
+    width: 1px;
+    background-color: brown;
+}
