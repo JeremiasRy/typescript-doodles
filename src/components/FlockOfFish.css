@@ -12,7 +12,7 @@
     margin: auto;
 }
 .fish {
-    position: relative;
+    position: absolute;
     display: inline-block;
     height: 1px;
     width: 1px;

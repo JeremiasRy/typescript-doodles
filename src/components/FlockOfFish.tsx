@@ -1,9 +1,16 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import "./FlockOfFish.css"
 
 class Fish {
     x:number;
     y:number;
+
+    constructor(x:number, y:number) {
+        this.x = x;
+        this.y = y;
+    }
+}
+class HerdFish extends Fish {
     private xForce:number = 0;
     private yForce:number = 0;
 
@@ -28,8 +35,7 @@ class Fish {
         this.yForce += amount
     }
     constructor(x:number, y:number) {
-        this.x = x;
-        this.y = y;
+        super(x,y);
     }
 }
 class GameArea {
@@ -46,40 +52,22 @@ export default function FlockOfFish() {
     if (tickTimer.current) {
         clearTimeout(tickTimer.current);
     }
-   
 
-    setTimeout(() => gameTick(), 20);
+    function handleMouseMove(e:React.MouseEvent<HTMLDivElement, MouseEvent>) {
+        player.x = e.clientX;
+        player.y = e.clientY;
+    } 
+
+    setTimeout(() => gameTick(), 10);
 
     function gameTick() {
-        player.move();
         setTick(tick + 1);
     }
 
-    function handleKeyDown(e:any) {
-        e.preventDefault();
-        switch (e.code) {
-            case "ArrowUp": {
-                player.addYforce(-200)
-                return
-            }
-            case "ArrowDown": {
-                player.addYforce(200)
-                return
-            }
-            case "ArrowRight": {
-                player.addXforce(200)
-                return;
-            }
-            case "ArrowLeft": {
-                player.addXforce(-200)
-                return;
-            }
-        }
-    }
     return (
         <div className="fish-wrapper">
-            <h1>Move the fish and see the herd follow</h1>
-            <div className="fish-wrapper__lake" tabIndex={0} onKeyDown={handleKeyDown}>
+            <h1>Move your mouse and see the herd follow</h1>
+            <div className="fish-wrapper__lake" onMouseMove={(e) => handleMouseMove(e)}>
                 <div className="fish" style={{left: player.x, top: player.y}}></div>
             </div>
         </div>
