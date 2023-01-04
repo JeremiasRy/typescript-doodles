@@ -25,9 +25,6 @@ class HerdFish extends Fish {
         this.x += xMovement;
         this.y += yMovement;
     }
-    constructor(x:number, y:number) {
-        super(x,y);
-    }
 }
 class GameArea {
     static forceToMove:number = 87;
@@ -35,7 +32,7 @@ class GameArea {
 }
 
 export default function FlockOfFish() {
-    const [player, setPlayer] = useState<Fish>(new Fish(0, 0))
+    const [player] = useState<Fish>(new Fish(0, 0))
     const [herd, setHerd] = useState<HerdFish[]>([]);
     const [tick, setTick] = useState(0);
 
@@ -54,7 +51,7 @@ export default function FlockOfFish() {
         player.y = e.clientY;
     } 
 
-    setTimeout(() => gameTick(), 30);
+    setTimeout(() => gameTick(), 40);
 
     function gameTick() {
         herd.forEach(fish => fish.move(player.x + Math.random() * 100, player.y + Math.random() * 50));
